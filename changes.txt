@@ -1,0 +1,11 @@
+Proposed Changes to AIGo Interface
+
+State
+The state of the board is a rune[][] that consists in the following constant
+values: WHITE, BLACK, EMPTY, BMARKED, WMARKED. The 'MARKED' values are used
+temporarily while processing a board.
+
+Display
+The displayed representation of the board is a rune[][] that contains prefered
+characters to represent black stones, white stones, and various characters to
+represent the proper shape of empty intersections.
