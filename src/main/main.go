@@ -127,12 +127,9 @@ func pieceToRune(piece Piece, a int, b int, dim int) rune {
     return r
 }
 
-
 func main() {
     var dim int =9
 	var board [][]Piece = initBoard(dim)
-
 	printStdBoard(board)
-
 }
 
