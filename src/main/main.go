@@ -10,6 +10,7 @@ import (
 
 func main() {
     var dim int =9
-	var m_board [][]board.Piece = board.InitBoard(dim)
+	var m_board board.Board = board.InitBoard(dim)
+        rules.ProcessBoard(&m_board)
 	board.PrintStdBoard(m_board)
 }
