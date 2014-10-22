@@ -8,11 +8,13 @@ import(
 //board constants are wrapped ints
 type Piece int
 const(
-  EMPTY = 0
+  NULLS = -1 //not a valid piece
+  EMPTY = 0 //empty intersection
   WHITE = 1
   BLACK = 2
   MARKED_B = 3
   MARKED_W = 4
+  MARKED_E = 5
 )
 
 // output unicode constants
