@@ -6,13 +6,6 @@ import (
   "fmt"
 )
 
-func TestRules(t *testing.T) {
-  const succ bool = true //false
-  if !succ {
-    t.Errorf("This is an intentional failure caused by %v",succ)
-  }
-}
-
 func TestSmallBoard(t *testing.T) {
   /*
    // We construct this test board
