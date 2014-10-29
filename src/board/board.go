@@ -41,7 +41,7 @@ BLK = '\u25c9'
 //Alias to avoid passing around explicit arrays
 type Board [][]Piece
 
-func InitBoard(dim int) [][]Piece {
+func InitBoard(dim int) Board { //[][]Piece {
     board := make([][]Piece, dim)
     for i := range board {
         board[i] = make([]Piece, dim)
@@ -54,7 +54,7 @@ func InitBoard(dim int) [][]Piece {
     return board
 }
 
-func PrintStdBoard(board [][]Piece) {
+func PrintStdBoard(board Board /*[][]Piece*/) {
 
 	var str string = "   "//three spaces
 	var dim  = len(board)

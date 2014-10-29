@@ -2,7 +2,6 @@ package rules
 
 import (
   "board"
-  //"fmt"
 )
 
 // The function ProcessBoard will take a state after a legal move has been 
@@ -45,19 +44,19 @@ func countLiberties(i int, j int, p board.Piece, m board.Piece, state *board.Boa
   (*state)[i][j] = p; //avoiding infinite recursion is good
 
   if getEntry(i+1,j,state) == board.EMPTY{
-    (*state)[i][j] = board.MARKED_E
+    (*state)[i+1][j] = board.MARKED_E
     lib_count += 1
   }
   if getEntry(i-1,j,state) == board.EMPTY{
-    (*state)[i][j] = board.MARKED_E
+    (*state)[i-1][j] = board.MARKED_E
     lib_count += 1
   }
   if getEntry(i,j+1,state) == board.EMPTY{
-    (*state)[i][j] = board.MARKED_E
+    (*state)[i][j+1] = board.MARKED_E
     lib_count += 1
   }
   if getEntry(i,j-1,state) == board.EMPTY{
-    (*state)[i][j] = board.MARKED_E
+    (*state)[i][j-1] = board.MARKED_E
     lib_count += 1
   }
 
