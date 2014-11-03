@@ -3,14 +3,13 @@ package game
 import (
   "fmt"
   "board"
-  //"rules" //currently unused
+  //"rules" //this will be used when isLegal is implemented
 )
 
-/* NOTES */
-// decide whether or not to make these functions methods of Game
-// should Game struct be renamed as lower-case?
-// implement basic functionality
-// write a unit test that plays several moves and provides full coverage
+//TODO List
+// 1. Finish implementing functions
+// 2. Define moveStatus codes
+// 3. Write good unit tests in twoPlayerGame_test.go
 
 // Game is the simplist way to represent a Go game
 type Game struct {
@@ -37,6 +36,8 @@ func (g *Game) isLegal(i int, j int) (bool,int) {
   return false,0
 }
 
+// pre: (i,j) is a legal move
+// post: move has been played, state of game is fully upto date
 func (g *Game) playMove(i int, j int) {
 }
 
@@ -69,32 +70,31 @@ func PlayGame(dim int) {
         } else{ fmt.Println("White's turn") }
 
         for !legalMove {
-        resign,pass,i,j = getMove()
-        if resign {
-          if bTurn{ fmt.Println("Black resigned, white wins")
-          } else { fmt.Println("White resigned, black wins") }
-          break //game over, escape
-        } else if pass {
-            if bTurn{ bPassed = true
-            } else { wPassed = true }
-            continue //turn over, next player's turn now
-        } else{ //we check if move (i,j) is legal
-            //if legal, set flag, play move
-            legalMove, moveStatus = g.isLegal(i,j)
-            if legalMove { g.playMove(i,j)
-            } else{
-                switch{
-                    case moveStatus == 1 :{ }
+            resign,pass,i,j = getMove()
+            if resign {
+              if bTurn{ fmt.Println("Black resigned, white wins")
+              } else { fmt.Println("White resigned, black wins") }
+              break //game over, escape
+            } else if pass {
+                if bTurn{ bPassed = true
+                } else { wPassed = true }
+                continue //turn over, next player's turn now
+            } else{ //we check if move (i,j) is legal
+                //if legal, play move
+                legalMove, moveStatus = g.isLegal(i,j)
+                if legalMove { g.playMove(i,j)
+                } else{ //otherwise tell user why move is illegal
+                    switch{
+                        case moveStatus == 1 :{ }
+                    }
                 }
             }
-            //TODO case swtich statements on moveStatus if !legalMove
-            //    print any detailed message
-        }
         }
 
-        //reset any state for next turn
+        //reset, update any state for next turn
         legalMove = false
         bTurn = !bTurn //switch players
+        g.blackTurn = bTurn //keep game-state current
     }
 }
 
