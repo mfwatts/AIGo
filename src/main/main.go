@@ -2,8 +2,8 @@ package main
 
 import (
   //"fmt" //currently unused
-  "board"
-  "rules"
+  //"board"
+  //"rules"
   "game"
 )
 
@@ -11,12 +11,10 @@ import (
 
 func main() {
     var dim int =9
-    var m_board board.Board = board.InitBoard(dim)
-    rules.ProcessBoard(&m_board)
-    board.PrintStdBoard(m_board)
+    //var m_board board.Board = board.InitBoard(dim)
+    //rules.ProcessBoard(&m_board)
+    //board.PrintStdBoard(m_board)
 
-    // remove this when PlayGame becomes fully implemented
-    if true { //false{
-        game.PlayGame(dim)
-    }
+    // twoPlayerGame is default
+    game.PlayGame(dim)
 }

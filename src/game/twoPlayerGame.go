@@ -103,9 +103,6 @@ func (g *Game) isLegal(i int, j int) (bool,int) {
 // pre: (i,j) is a legal move
 // post: move has been played, state of game is fully upto date
 func (g *Game) playMove(i int, j int) {
-  //copy current to previous state
-  //place stone at i,j on current
-  //process board
    tmp := board.CloneBoard(g.curr)
    if g.blackTurn{
        tmp[i][j] = board.BLACK
@@ -139,7 +136,7 @@ func PlayGame(dim int) {
     resign, pass, i, j := false, true, 0,0 //the current move
     legalMove := false
     moveStatus := 0 // constants for why a move is legal/illegal
-    for !wPassed && !bPassed {
+    for !wPassed || !bPassed {
 
         board.PrintStdBoard(g.curr)
         if bTurn{ fmt.Println("Black's turn")
