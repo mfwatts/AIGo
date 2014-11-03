@@ -3,6 +3,10 @@ package game
 import (
   "fmt"
   "board"
+  "os"
+  "bufio"
+  "strings"
+  "strconv"
   //"rules" //this will be used when isLegal is implemented
 )
 
@@ -23,10 +27,45 @@ type Game struct {
 //returns false,true,0,0 if player passed
 // otherwise return false,false,<i>,<j> for move in position [i,j]
 func getMove() (bool,bool,int,int) {
-    //print choice string to user
-    //parse user's string
-    //return correct tuple
-    return false,true,0,0
+    reader := bufio.NewReader(os.Stdin)
+    for { //loop until valid input is provided
+    fmt.Println("Play a move? yes/no")
+    text, _ := reader.ReadString('\n')
+    text = strings.ToLower(strings.TrimSpace(text))
+    //fmt.Println(text) //debug line
+    if text == "yes" {
+        fmt.Println("Enter pair row,column (e.g 3,5)")
+        pairStr, _ := reader.ReadString('\n')
+        pair := strings.Split(strings.TrimSpace(pairStr),",")
+        //fmt.Println(pair) //debug line
+        if len(pair) != 2{
+            ; // TODO complain at user
+        } else{
+            i, _ := strconv.Atoi(strings.TrimSpace(pair[0]))
+            j, _ := strconv.Atoi(strings.TrimSpace(pair[1]))
+            //fmt.Println(i,j) //debug line
+            return false,false,i,j
+        }
+    } else if text == "no"{
+        fmt.Println("Enter 'yes' to pass")
+        text, _ = reader.ReadString('\n')
+        text = strings.ToLower(strings.TrimSpace(text))
+        //fmt.Println(text) //debug line
+        if text == "yes"{
+            return false,true,0,0
+        }
+
+        fmt.Println("enter 'yes' to resign")
+        text, _ = reader.ReadString('\n')
+        text = strings.ToLower(strings.TrimSpace(text))
+        //fmt.Println(text) //debug line
+        if text == "yes"{
+            return true,false,0,0
+        }
+    }
+    fmt.Println("Unable to process input, please try again");
+    }
+    //return false,true,0,0
 }
 
 // returns true,0 is move is legal
@@ -80,6 +119,8 @@ func PlayGame(dim int) {
                 } else { wPassed = true }
                 continue //turn over, next player's turn now
             } else{ //we check if move (i,j) is legal
+                if bTurn{ bPassed = false
+                } else { wPassed = false }
                 //if legal, play move
                 legalMove, moveStatus = g.isLegal(i,j)
                 if legalMove { g.playMove(i,j)

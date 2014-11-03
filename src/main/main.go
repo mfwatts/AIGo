@@ -16,7 +16,7 @@ func main() {
     board.PrintStdBoard(m_board)
 
     // remove this when PlayGame becomes fully implemented
-    if false{
+    if true { //false{
         game.PlayGame(dim)
     }
 }
