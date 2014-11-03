@@ -7,7 +7,7 @@ import (
   "bufio"
   "strings"
   "strconv"
-  //"rules" //this will be used when isLegal is implemented
+  "rules"
 )
 
 //TODO List
@@ -72,12 +72,49 @@ func getMove() (bool,bool,int,int) {
 // otherwise, return false,<reason>
 // define int constants to provide more info
 func (g *Game) isLegal(i int, j int) (bool,int) {
-  return false,0
+   // it's illegal to play on a non-empty point
+   if g.curr[i][j] != board.EMPTY {
+       return false,1
+   }
+
+   // preview state of board after playing this move
+   tmp := board.CloneBoard(g.curr)
+   if g.blackTurn{
+       tmp[i][j] = board.BLACK
+   } else{
+       tmp[i][j] = board.WHITE
+   }
+   rules.ProcessBoard(&tmp)
+
+  // it's illegal to commit suicide
+  if tmp[i][j] == board.EMPTY{
+      return false,2
+  }
+
+  // it's illegal to repeat state, check if ko
+  if board.EqualBoard(tmp, g.prev){
+      return false,3
+  }
+
+  // if we don't violate previous rules, it's legal
+  return true,0
 }
 
 // pre: (i,j) is a legal move
 // post: move has been played, state of game is fully upto date
 func (g *Game) playMove(i int, j int) {
+  //copy current to previous state
+  //place stone at i,j on current
+  //process board
+   tmp := board.CloneBoard(g.curr)
+   if g.blackTurn{
+       tmp[i][j] = board.BLACK
+   } else{
+       tmp[i][j] = board.WHITE
+   }
+   rules.ProcessBoard(&tmp)
+   g.prev = g.curr
+   g.curr = tmp
 }
 
 //return empty game of dimensions dim*dim
@@ -113,11 +150,11 @@ func PlayGame(dim int) {
             if resign {
               if bTurn{ fmt.Println("Black resigned, white wins")
               } else { fmt.Println("White resigned, black wins") }
-              break //game over, escape
+              return //game over, escape
             } else if pass {
                 if bTurn{ bPassed = true
                 } else { wPassed = true }
-                continue //turn over, next player's turn now
+                legalMove=true //turn over, next player's turn now
             } else{ //we check if move (i,j) is legal
                 if bTurn{ bPassed = false
                 } else { wPassed = false }

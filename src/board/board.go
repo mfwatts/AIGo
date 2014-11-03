@@ -3,6 +3,7 @@ package board
 import(
   "fmt"
   "strconv"
+  "reflect"
 )
 
 //board constants are wrapped ints
@@ -52,6 +53,19 @@ func InitBoard(dim int) Board {
        }
     }
     return board
+}
+
+func CloneBoard(src Board) Board {
+    dest := make([][]Piece,len(src))
+    for i:= range src{
+        dest[i] = make([]Piece,len(src[i]))
+        copy(dest[i],src[i])
+    }
+    return dest
+}
+
+func EqualBoard(src Board, dest Board) bool{
+    return reflect.DeepEqual(src,dest)
 }
 
 func PrintStdBoard(board Board) {
