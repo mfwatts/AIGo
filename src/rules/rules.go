@@ -64,13 +64,13 @@ func countLiberties(i int, j int, p board.Piece, m board.Piece, state *board.Boa
 		lib_count += countLiberties(i+1, j, p, m, state)
 	}
 	if getEntry(i-1, j, state) == p {
-		lib_count += countLiberties(i+1, j, p, m, state)
+		lib_count += countLiberties(i-1, j, p, m, state)
 	}
 	if getEntry(i, j+1, state) == p {
-		lib_count += countLiberties(i+1, j, p, m, state)
+		lib_count += countLiberties(i, j+1, p, m, state)
 	}
 	if getEntry(i, j-1, state) == p {
-		lib_count += countLiberties(i+1, j, p, m, state)
+		lib_count += countLiberties(i, j-1, p, m, state)
 	}
 
 	return lib_count
@@ -99,19 +99,34 @@ func cleanBoard(state *board.Board) {
 func printStats(state *board.Board) {
 }
 
-func ProcessBoard(state *board.Board) {
+func removeGroupIfDead(i int, j int, p board.Piece, m board.Piece, state *board.Board) {
+	if (*state)[i][j] == p {
+		if countLiberties(i, j, p, m, state) == 0 {
+			removeGroup(i, j, m, state)
+		}
+	}
+}
+
+func ProcessBoard(state *board.Board, bTurn bool) {
 	var dim = len(*state)
+	// we count the opponent's liberties and remove dead groups before we count
+	// our own
 	for i := 0; i < dim; i++ {
 		for j := 0; j < dim; j++ {
-			if (*state)[i][j] == board.BLACK {
-				if countLiberties(i, j, board.BLACK, board.MARKED_B, state) == 0 {
-					removeGroup(i, j, board.MARKED_B, state)
-				}
+			if bTurn {
+				removeGroupIfDead(i, j, board.WHITE, board.MARKED_W, state)
+			} else {
+				removeGroupIfDead(i, j, board.BLACK, board.MARKED_B, state)
 			}
-			if (*state)[i][j] == board.WHITE {
-				if countLiberties(i, j, board.WHITE, board.MARKED_W, state) == 0 {
-					removeGroup(i, j, board.MARKED_W, state)
-				}
+		}
+	}
+	cleanBoard(state)
+	for i := 0; i < dim; i++ {
+		for j := 0; j < dim; j++ {
+			if bTurn {
+				removeGroupIfDead(i, j, board.BLACK, board.MARKED_B, state)
+			} else {
+				removeGroupIfDead(i, j, board.WHITE, board.MARKED_W, state)
 			}
 		}
 	}

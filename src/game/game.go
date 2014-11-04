@@ -34,7 +34,7 @@ func (g *Game) isLegal(i int, j int) (bool, int) {
 	} else {
 		tmp[i][j] = board.WHITE
 	}
-	rules.ProcessBoard(&tmp)
+	rules.ProcessBoard(&tmp, g.blackTurn)
 
 	// it's illegal to commit suicide
 	if tmp[i][j] == board.EMPTY {
@@ -59,7 +59,7 @@ func (g *Game) playMove(i int, j int) {
 	} else {
 		tmp[i][j] = board.WHITE
 	}
-	rules.ProcessBoard(&tmp)
+	rules.ProcessBoard(&tmp, g.blackTurn)
 	g.prev = g.curr
 	g.curr = tmp
 }
