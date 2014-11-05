@@ -41,7 +41,7 @@ func removeGroup(i int, j int, m board.Piece, state *board.Board) {
 func countLiberties(i int, j int, p board.Piece, m board.Piece, state *board.Board) int {
 	var lib_count int = 0
 
-	(*state)[i][j] = p //avoiding infinite recursion is good
+	(*state)[i][j] = m //avoiding infinite recursion is good
 
 	if getEntry(i+1, j, state) == board.EMPTY {
 		(*state)[i+1][j] = board.MARKED_E
