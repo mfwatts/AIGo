@@ -11,7 +11,7 @@ func Test_isLegal(t *testing.T) {
 	//	playing in non-empty position
 	//	suicide
 	//	ko //unimplemented
-	g3 := initGame(3)
+	g3 := initGame(4)
 
 	// Initial board
 	// EWE
@@ -29,6 +29,26 @@ func Test_isLegal(t *testing.T) {
 	if leg == true {
 		t.Errorf("We can't allow suicide. 2=%v", code)
 	}
+
+	// Initial board - ko
+	// EWBE
+	// WEWB
+	// EWBE
+	(g3.curr)[1][1] = board.EMPTY
+	(g3.curr)[2][2], (g3.curr)[1][3], (g3.curr)[0][2] = board.BLACK, board.BLACK, board.BLACK
+	(g3.curr)[1][2], (g3.curr)[2][1] = board.WHITE, board.WHITE
+
+	board.PrintStdBoard(g3.curr)
+	leg, code = g3.isLegal(1, 1)
+	if leg == true {
+		leg2, code2 := g3.isLegal(1, 2)
+		if leg2 == true {
+			t.Errorf("We can't allow ko. 3=%v", code2)
+		}
+	} else {
+		t.Errorf("We don't allow ko!. code=%v", code)
+	}
+
 }
 
 func Test_playMove(t *testing.T) {
@@ -36,3 +56,4 @@ func Test_playMove(t *testing.T) {
 		t.Errorf("playMove failure %v", true)
 	}
 }
+

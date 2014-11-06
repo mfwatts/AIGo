@@ -2,6 +2,7 @@ package rules
 
 import (
 	"board"
+	"fmt"
 )
 
 // The function ProcessBoard will take a state after a legal move has been
@@ -9,7 +10,7 @@ import (
 
 // we use this to grab entry from state whenever bounds-checking is an issue
 func getEntry(i int, j int, state *board.Board) board.Piece {
-	var dim int = len((*state))
+	dim := len(*state)
 	if i < 0 || i >= dim || j < 0 || j >= dim {
 		return board.NULLS //we overshot the board
 	} else {
@@ -79,8 +80,9 @@ func countLiberties(i int, j int, p board.Piece, m board.Piece, state *board.Boa
 // remove temporary marked pieces
 func cleanBoard(state *board.Board) {
 	var dim = len(*state)
+
 	for i := 0; i < dim; i++ {
-		for j := 0; j < dim; j++ {
+		for j := 0; j < dim; j++ { //MANNY: GOOD PLACE FOR A SWITCH
 			if (*state)[i][j] == board.MARKED_B {
 				(*state)[i][j] = board.BLACK
 			}
@@ -97,12 +99,24 @@ func cleanBoard(state *board.Board) {
 //If we desire to implement this function, it will print statistics about the
 // state to stdout
 func printStats(state *board.Board) {
+	boardNew := *state
+	dim := len(boardNew)
+
+	for a := 0; a < dim; a++ {
+		for b := 0; b < dim; b++ {
+			fmt.Print(boardNew[a][b])
+		}
+		fmt.Println()
+	}
 }
 
 func removeGroupIfDead(i int, j int, p board.Piece, m board.Piece, state *board.Board) {
+	cleanBoard(state)
 	if (*state)[i][j] == p {
 		if countLiberties(i, j, p, m, state) == 0 {
 			removeGroup(i, j, m, state)
+			cleanBoard(state)
+
 		}
 	}
 }
@@ -120,7 +134,9 @@ func ProcessBoard(state *board.Board, bTurn bool) {
 			}
 		}
 	}
+
 	cleanBoard(state)
+
 	for i := 0; i < dim; i++ {
 		for j := 0; j < dim; j++ {
 			if bTurn {
@@ -130,5 +146,8 @@ func ProcessBoard(state *board.Board, bTurn bool) {
 			}
 		}
 	}
+
 	cleanBoard(state)
+
 }
+
